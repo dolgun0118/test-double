@@ -1,4 +1,4 @@
-## Dummy Test
+## Spy Test
 
 ```typescript
 import { LineChart } from "./LineChart";

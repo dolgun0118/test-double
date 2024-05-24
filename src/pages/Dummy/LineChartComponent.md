@@ -1,4 +1,4 @@
-// src/BarChartComponent.tsx
+```typescript
 import { useEffect, useRef } from "react";
 import { LineChart } from "./LineChart";
 
@@ -20,3 +20,4 @@ const LineChartComponent = () => {
 };
 
 export default LineChartComponent;
+```

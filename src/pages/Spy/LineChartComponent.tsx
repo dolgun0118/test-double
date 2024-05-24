@@ -13,7 +13,7 @@ const LineChartComponent = () => {
   }, []);
 
   return (
-    <svg ref={svgRef} width={550} height={300}>
+    <svg style={{ marginTop: "5rem" }} ref={svgRef} width={550} height={300}>
       <rect x={0} y={0} width={550} height={300} fill="lightgray" />
     </svg>
   );

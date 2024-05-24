@@ -1,10 +1,12 @@
 import { Selection } from "d3";
 
 export interface DataItem {
-  name: string;
-  line1: number;
-  line2: number;
-  line3: number;
+  dimension: string;
+  measure: {
+    line1: number;
+    line2: number;
+    line3: number;
+  };
 }
 
 export abstract class AbstractLineChart {

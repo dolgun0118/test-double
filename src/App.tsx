@@ -31,7 +31,13 @@ function App() {
           </li>
         </ul>
       </nav>
-      <div style={{ padding: "1rem", maxHeight: "100dvh", overflow: "auto" }}>
+      <div
+        style={{
+          padding: "1rem",
+          maxHeight: "100dvh",
+          overflow: "auto",
+        }}
+      >
         <Outlet />
       </div>
     </>

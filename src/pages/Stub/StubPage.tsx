@@ -4,8 +4,16 @@ import LineChartComponent from "./LineChartComponent";
 
 const StubPage = () => {
   return (
-    <div>
-      <Markdown>{markdown}</Markdown>
+    <div
+      style={{
+        display: "grid",
+        height: "100%",
+        gridTemplateColumns: "1fr 600px",
+      }}
+    >
+      <div style={{ height: "100%", overflow: "auto" }}>
+        <Markdown>{markdown}</Markdown>
+      </div>
       <LineChartComponent />
     </div>
   );
