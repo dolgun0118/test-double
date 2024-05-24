@@ -13,3 +13,8 @@ declare module "*.md" {
 
   export { attributes, toc, html, ReactComponent, markdown };
 }
+
+declare module "*.ts?string" {
+  const content: string;
+  export default content;
+}

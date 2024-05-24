@@ -3,13 +3,9 @@ import ReactDOM from "react-dom/client";
 import App from "./App.tsx";
 import "./index.css";
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
-import DummyTestPage from "./pages/DummyTestPage.tsx";
+
 import HomePage from "./pages/HomePage.tsx";
-import StubTestPage from "./pages/StubTestPage.tsx";
-import SpyTestPage from "./pages/SpyTestPage.tsx";
-import FakeTestPage from "./pages/FakeTestPage.tsx";
-import MockTestPage from "./pages/MockTestPage.tsx";
-// import { worker } from "./mocks/browser.ts";
+import { DummyPage, MockPage, SpyPage, StubPage, FakePage } from "./pages";
 
 async function enableMocking() {
   if (process.env.NODE_ENV !== "development") {
@@ -31,23 +27,23 @@ const router = createBrowserRouter([
       },
       {
         path: "dummy",
-        element: <DummyTestPage />,
+        element: <DummyPage />,
       },
       {
         path: "stub",
-        element: <StubTestPage />,
+        element: <StubPage />,
       },
       {
         path: "spy",
-        element: <SpyTestPage />,
+        element: <SpyPage />,
       },
       {
         path: "fake",
-        element: <FakeTestPage />,
+        element: <FakePage />,
       },
       {
         path: "mock",
-        element: <MockTestPage />,
+        element: <MockPage />,
       },
     ],
   },

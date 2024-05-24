@@ -1,43 +1,34 @@
+import { AbstractLineChart, DataItem } from "../../AbstractLineChart";
 import * as d3 from "d3";
-import axios from "axios";
 
-interface DataItem {
-  name: string;
-  line1: number;
-  line2: number;
-  line3: number;
-}
+export class LineChart extends AbstractLineChart {
+  data: DataItem[];
 
-export class LineChart {
-  private svg: SVGSVGElement;
-  private legend: SVGGElement;
-
-  constructor(svg: SVGSVGElement) {
-    this.svg = svg;
-
-    const legendGroup = d3
-      .select(this.svg)
-      .append("g")
-      .attr("class", "legend")
-      .attr("transform", `translate(450,20)`);
-    this.legend = legendGroup.node() as SVGGElement;
+  constructor(data: DataItem[]) {
+    super();
+    this.data = data;
   }
 
-  async render() {
-    const data: DataItem[] = await this.fetchData();
-    this.drawChart(data);
-    this.drawLegend();
-  }
-
-  private async fetchData(): Promise<DataItem[]> {
-    const response = await axios.get("/api/data");
-    return response.data;
-  }
-
-  private drawChart(data: DataItem[]) {
-    const svg = d3.select(this.svg);
+  protected async drawChart(
+    svg: d3.Selection<SVGSVGElement, unknown, null, undefined>
+  ): Promise<void> {
     const width = +svg.attr("width");
     const height = +svg.attr("height");
+
+    const data = [
+      {
+        name: "January",
+        line1: 50,
+        line2: 50,
+        line3: 50,
+      },
+      {
+        name: "February",
+        line1: 500,
+        line2: 400,
+        line3: 300,
+      },
+    ];
 
     const x = d3
       .scalePoint()
@@ -90,12 +81,19 @@ export class LineChart {
       .attr("d", line3);
   }
 
-  private drawLegend() {
+  protected async drawLegend(
+    _svg: d3.Selection<SVGSVGElement, unknown, null, undefined>
+  ): Promise<void> {
+    const legend = _svg
+      .append("g")
+      .attr("class", "legend")
+      .attr("transform", `translate(450,20)`)
+      .node()!;
     const legendData = ["line1", "line2", "line3"];
     const legendColors = ["steelblue", "green", "red"];
 
     const legendItem = d3
-      .select(this.legend)
+      .select(legend)
       .selectAll(".legend-item")
       .data(legendData)
       .enter()
@@ -117,5 +115,11 @@ export class LineChart {
       .attr("y", 10)
       .text((d) => d)
       .attr("alignment-baseline", "middle");
+  }
+
+  async render(svg: SVGSVGElement): Promise<void> {
+    const selection = d3.select(svg);
+    this.drawChart(selection);
+    this.drawLegend(selection);
   }
 }
