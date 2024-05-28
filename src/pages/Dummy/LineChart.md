@@ -1,31 +1,45 @@
 ```typescript
-import * as d3 from "d3";
-import { AbstractLineChart, DataItem } from "../../AbstractLineChart";
+export interface SVGSelection
+  extends d3.Selection<SVGSVGElement, unknown, null, undefined> {}
 
-export class LineChart extends AbstractLineChart {
+export interface DataItem {
+  x: string;
+  y: {
+    line1: number;
+    line2: number;
+    line3: number;
+  };
+}
+
+export class LineChart {
   data: DataItem[];
 
   constructor(data: DataItem[]) {
-    super();
     this.data = data;
   }
 
-  protected drawChart(
-    _svg: d3.Selection<SVGSVGElement, unknown, null, undefined>
-  ): Promise<void> {
-    throw new Error("Method not implemented.");
-  }
-  protected async drawLegend(
-    _svg: d3.Selection<SVGSVGElement, unknown, null, undefined>
-  ): Promise<void> {
-    throw new Error("Method not implemented.");
+  private async drawChart(selection: SVGSelection): Promise<void> {
+    console.group("drawChart is called");
+    console.log(selection);
+    console.groupEnd();
   }
 
-  async render(svg: SVGSVGElement): Promise<void> {
-    const selection = d3.select(svg);
+  private async drawLegend(selection: SVGSelection): Promise<void> {
+    console.group("drawLegend is called");
+    console.log(selection);
+    console.groupEnd();
+  }
 
-    this.drawChart(selection);
-    this.drawLegend(selection);
+  async render(svg?: SVGSVGElement): Promise<void> {
+    console.group("render is called");
+    console.log(svg);
+    console.groupEnd();
+
+    if (svg) {
+      const selection = d3.select(svg);
+      this.drawChart(selection);
+      this.drawLegend(selection);
+    }
   }
 }
 ```

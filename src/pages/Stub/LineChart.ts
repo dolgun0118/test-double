@@ -1,62 +1,71 @@
-import { AbstractLineChart, DataItem } from "../../AbstractLineChart";
 import * as d3 from "d3";
 
-export class LineChart extends AbstractLineChart {
+const data = [
+  {
+    x: "January",
+    y: { line1: 50, line2: 50, line3: 50 },
+  },
+  {
+    x: "February",
+    y: { line1: 500, line2: 400, line3: 300 },
+  },
+];
+
+const legendData = ["line1", "line2", "line3"];
+const legendColors = ["steelblue", "green", "red"];
+
+export interface SVGSelection
+  extends d3.Selection<SVGSVGElement, unknown, null, undefined> {}
+
+export interface DataItem {
+  x: string;
+  y: {
+    line1: number;
+    line2: number;
+    line3: number;
+  };
+}
+
+export class LineChart {
   data: DataItem[];
 
   constructor(data: DataItem[]) {
-    super();
     this.data = data;
   }
 
-  protected async drawChart(
-    svg: d3.Selection<SVGSVGElement, unknown, null, undefined>
-  ): Promise<void> {
-    const width = +svg.attr("width");
-    const height = +svg.attr("height");
-
-    const data = [
-      {
-        name: "January",
-        line1: 50,
-        line2: 50,
-        line3: 50,
-      },
-      {
-        name: "February",
-        line1: 500,
-        line2: 400,
-        line3: 300,
-      },
-    ];
+  private async drawChart(selection: SVGSelection): Promise<void> {
+    const width = +selection.attr("width");
+    const height = +selection.attr("height");
 
     const x = d3
       .scalePoint()
-      .domain(data.map((d) => d.name))
+      .domain(data.map((d) => d.x))
       .range([0, width - 100]);
 
     const y = d3
       .scaleLinear()
-      .domain([0, d3.max(data, (d) => Math.max(d.line1, d.line2, d.line3))!])
+      .domain([
+        0,
+        d3.max(data, ({ y }) => Math.max(y.line1, y.line2, y.line3))!,
+      ])
       .nice()
       .range([height, 30]);
 
     const line1 = d3
       .line<DataItem>()
-      .x((d) => x(d.name)!)
-      .y((d) => y(d.line1));
-
+      .x((d) => x(d.x)!)
+      .y((d) => y(d.y.line1));
     const line2 = d3
       .line<DataItem>()
-      .x((d) => x(d.name)!)
-      .y((d) => y(d.line2));
+      .x((d) => x(d.x)!)
+      .y((d) => y(d.y.line2));
 
     const line3 = d3
       .line<DataItem>()
-      .x((d) => x(d.name)!)
-      .y((d) => y(d.line3));
+      .x((d) => x(d.x)!)
+      .y((d) => y(d.y.line3));
 
-    svg
+    selection
       .append("path")
       .datum(data)
       .attr("fill", "none")
@@ -64,7 +73,7 @@ export class LineChart extends AbstractLineChart {
       .attr("stroke-width", 3)
       .attr("d", line1);
 
-    svg
+    selection
       .append("path")
       .datum(data)
       .attr("fill", "none")
@@ -72,7 +81,7 @@ export class LineChart extends AbstractLineChart {
       .attr("stroke-width", 3)
       .attr("d", line2);
 
-    svg
+    selection
       .append("path")
       .datum(data)
       .attr("fill", "none")
@@ -81,16 +90,12 @@ export class LineChart extends AbstractLineChart {
       .attr("d", line3);
   }
 
-  protected async drawLegend(
-    _svg: d3.Selection<SVGSVGElement, unknown, null, undefined>
-  ): Promise<void> {
-    const legend = _svg
+  private async drawLegend(selection: SVGSelection): Promise<void> {
+    const legend = selection
       .append("g")
       .attr("class", "legend")
       .attr("transform", `translate(450,20)`)
       .node()!;
-    const legendData = ["line1", "line2", "line3"];
-    const legendColors = ["steelblue", "green", "red"];
 
     const legendItem = d3
       .select(legend)
@@ -99,7 +104,7 @@ export class LineChart extends AbstractLineChart {
       .enter()
       .append("g")
       .attr("class", "legend-item")
-      .attr("transform", (d, i) => `translate(0, ${i * 25})`);
+      .attr("transform", (_, i) => `translate(0, ${i * 25})`);
 
     legendItem
       .append("rect")
@@ -107,7 +112,7 @@ export class LineChart extends AbstractLineChart {
       .attr("y", 3)
       .attr("width", 10)
       .attr("height", 10)
-      .attr("fill", (d, i) => legendColors[i]);
+      .attr("fill", (_, i) => legendColors[i]);
 
     legendItem
       .append("text")

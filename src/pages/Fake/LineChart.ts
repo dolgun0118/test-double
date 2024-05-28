@@ -1,10 +1,16 @@
-import { AbstractLineChart, DataItem } from "../../AbstractLineChart";
+export interface DataItem {
+  dimension: string;
+  measure: {
+    line1: number;
+    line2: number;
+    line3: number;
+  };
+}
 
-export class LineChart extends AbstractLineChart {
+export class LineChart {
   data: DataItem[];
 
   constructor(data: DataItem[]) {
-    super();
     this.data = data;
   }
 

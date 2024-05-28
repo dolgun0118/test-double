@@ -1,11 +1,18 @@
-import { AbstractLineChart, DataItem } from "../../AbstractLineChart";
 import * as d3 from "d3";
 
-export class LineChart extends AbstractLineChart {
+export interface DataItem {
+  dimension: string;
+  measure: {
+    line1: number;
+    line2: number;
+    line3: number;
+  };
+}
+
+export class LineChart {
   data: DataItem[];
 
   constructor(data: DataItem[]) {
-    super();
     this.data = data;
   }
 
@@ -17,44 +24,45 @@ export class LineChart extends AbstractLineChart {
 
     const data = [
       {
-        name: "January",
-        line1: 50,
-        line2: 50,
-        line3: 50,
+        dimension: "January",
+        measure: { line1: 50, line2: 50, line3: 50 },
       },
       {
-        name: "February",
-        line1: 500,
-        line2: 400,
-        line3: 300,
+        dimension: "February",
+        measure: { line1: 500, line2: 400, line3: 300 },
       },
     ];
 
     const x = d3
       .scalePoint()
-      .domain(data.map((d) => d.name))
+      .domain(data.map((d) => d.dimension))
       .range([0, width - 100]);
 
     const y = d3
       .scaleLinear()
-      .domain([0, d3.max(data, (d) => Math.max(d.line1, d.line2, d.line3))!])
+      .domain([
+        0,
+        d3.max(data, ({ measure }) =>
+          Math.max(measure.line1, measure.line2, measure.line3)
+        )!,
+      ])
       .nice()
       .range([height, 30]);
 
     const line1 = d3
       .line<DataItem>()
-      .x((d) => x(d.name)!)
-      .y((d) => y(d.line1));
+      .x((d) => x(d.dimension)!)
+      .y((d) => y(d.measure.line1));
 
     const line2 = d3
       .line<DataItem>()
-      .x((d) => x(d.name)!)
-      .y((d) => y(d.line2));
+      .x((d) => x(d.dimension)!)
+      .y((d) => y(d.measure.line2));
 
     const line3 = d3
       .line<DataItem>()
-      .x((d) => x(d.name)!)
-      .y((d) => y(d.line3));
+      .x((d) => x(d.dimension)!)
+      .y((d) => y(d.measure.line3));
 
     svg
       .append("path")
