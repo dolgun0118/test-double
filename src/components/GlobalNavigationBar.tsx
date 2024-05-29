@@ -5,12 +5,33 @@ const GlobalNavigationBar = () => {
     <nav className="global_navigation_bar">
       <ul>
         <li>
-          <Link to="">Test란</Link>
+          <Link to="home">Test란</Link>
+          <ul>
+            <li>
+              <Link to="home/unit-test">Unit Test</Link>
+            </li>
+            <li>
+              <Link to="home/integration-test">Integration Test</Link>
+            </li>
+            <li>
+              <Link to="home/e2e-test">E2E Test</Link>
+            </li>
+          </ul>
         </li>
         <li>
           <Link to="front-end">프론트 관점에서의 Test</Link>
+          <ul>
+            <li>
+              <Link to="front-end/unit-test">Unit Test</Link>
+            </li>
+            <li>
+              <Link to="front-end/integration-test">Integration Test</Link>
+            </li>
+            <li>
+              <Link to="front-end/e2e-test">E2E Test</Link>
+            </li>
+          </ul>
         </li>
-
         <li>
           <Link to="test-double">테스트를 위한 객체 - Test Double</Link>
           <ul>
