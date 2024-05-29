@@ -1,39 +1,29 @@
 import * as d3 from "d3";
-import axios from "axios";
 
-interface DataItem {
-  name: string;
-  line1: number;
-  line2: number;
-  line3: number;
+export interface SVGSelection
+  extends d3.Selection<SVGSVGElement, unknown, null, undefined> {}
+
+export interface DataItem {
+  x: string;
+  y: {
+    line1: number;
+    line2: number;
+    line3: number;
+  };
 }
 
 export class LineChart {
-  private svg: SVGSVGElement;
-  private legend: SVGGElement;
+  data: DataItem[];
 
-  constructor(svg: SVGSVGElement) {
-    this.svg = svg;
-
-    const legendGroup = d3
-      .select(this.svg)
-      .append("g")
-      .attr("class", "legend")
-      .attr("transform", `translate(450,20)`);
-    this.legend = legendGroup.node() as SVGGElement;
+  constructor(data: DataItem[]) {
+    this.data = data;
   }
 
-  async render() {
-    const data: DataItem[] = await this.fetchData();
-    this.drawChart(data);
-    this.drawLegend();
+  async render(svg: SVGSVGElement): Promise<void> {
+    const selection = d3.select(svg);
+    this.drawChart(selection);
+    this.drawLegend(selection);
   }
-
-  private async fetchData(): Promise<DataItem[]> {
-    const response = await axios.get("/api/data");
-    return response.data;
-  }
-
   private drawChart(data: DataItem[]) {
     const svg = d3.select(this.svg);
     const width = +svg.attr("width");

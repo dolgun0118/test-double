@@ -2,13 +2,13 @@
   height: 100dvh;
   width: 100dvw;
   display: grid;
-  grid-template-columns: 12rem 1fr;
+  grid-template-columns: 18rem 1fr;
 }
 #root > * {
   box-sizing: border-box;
 }
 
-.gnb {
+.global_navigation_bar {
   width: 100%;
   height: inherit;
   border-right: 1px solid azure;
