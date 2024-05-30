@@ -9,7 +9,13 @@ import {
 } from "react-router-dom";
 
 import HomePage from "./pages/Home/HomePage.tsx";
-import { DummyPage, MockPage, SpyPage, StubPage, FakePage } from "./pages";
+import {
+  DummyPage,
+  MockPage,
+  SpyPage,
+  StubPage,
+  FakePage,
+} from "./pages/TestDouble/index.ts";
 import FrontEndPage from "./pages/FrontEnd/FrontEndPage.tsx";
 import HomeUnitTestPage from "./pages/Home/UnitTest/UnitTestPage.tsx";
 import HomeIntegrationTestPage from "./pages/Home/IntegrationTest/IntegrationTestPage.tsx";
@@ -17,6 +23,7 @@ import HomeE2ETestPage from "./pages/Home/E2ETest/E2ETestPage.tsx";
 import FrontUnitTestPage from "./pages/FrontEnd/UnitTest/UnitTestPage.tsx";
 import FrontIntegrationTestPage from "./pages/FrontEnd/IntegrationTest/IntegrationTestPage.tsx";
 import FrontE2ETestPage from "./pages/FrontEnd/E2ETest/E2ETestPage.tsx";
+import TestDoublePage from "./pages/TestDouble/TestDoublePage.tsx";
 
 async function enableMocking() {
   if (process.env.NODE_ENV !== "development") {
@@ -81,6 +88,10 @@ const router = createBrowserRouter([
       {
         path: "test-double",
         children: [
+          {
+            index: true,
+            element: <TestDoublePage />,
+          },
           {
             path: "dummy",
             element: <DummyPage />,

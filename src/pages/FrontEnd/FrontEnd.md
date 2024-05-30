@@ -24,8 +24,14 @@
 
 - **정규 표현식**: 정규 표현식을 사용하는 함수의 동작을 검증.
 
-**Store를 사용하는 컴포넌트**
+**Store + 컴포넌트**
 
-**React-Query를 사용하는 컴포넌트**
+- ERdiagram, Table, DashBoard
+
+**React-Query + 컴포넌트**
+
+- Page, Dialog
 
 **사용 시나리오**
+
+- DataWarehouse -> DataMart -> Chart -> Dashboard
