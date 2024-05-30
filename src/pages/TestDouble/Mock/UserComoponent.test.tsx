@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 // UserComponent.test.tsx
 import { fireEvent, render, screen } from "@testing-library/react";
 import "@testing-library/jest-dom";
@@ -5,6 +6,10 @@ import UserComponent from "./UserComponent";
 import { http, HttpResponse } from "msw";
 import { setupServer } from "msw/node";
 import { User, UserList } from "./User";
+
+import { TextEncoder } from "util";
+
+(global as any).TextEncoder = TextEncoder;
 
 const server = setupServer(
   http.get("/greeting", () => {

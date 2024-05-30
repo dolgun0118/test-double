@@ -1,6 +1,5 @@
 ```typescript
 // UserComponent.test.tsx
-// UserComponent.test.tsx
 import { render, screen } from "@testing-library/react";
 import "@testing-library/jest-dom";
 import { UserList } from "./User";

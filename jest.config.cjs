@@ -6,6 +6,7 @@ module.exports = {
   transform: {
     "^.+\\.[tj]sx?$": "ts-jest",
   },
+  setupFilesAfterEnv: ["text-encoding"],
   moduleNameMapper: {
     d3: "<rootDir>/node_modules/d3/dist/d3.js",
   },

@@ -1,25 +1,48 @@
 ```typescript
-import { render, screen } from "@testing-library/react";
+// UserComponent.test.tsx
+import { fireEvent, render, screen } from "@testing-library/react";
 import "@testing-library/jest-dom";
-
-import { UserList } from "./User";
 import UserComponent from "./UserComponent";
+import { http, HttpResponse } from "msw";
+import { setupServer } from "msw/node";
+import { User, UserList } from "./User";
 
-test("UserComponent", () => {
-  const fakeUserList: UserList = {
-    data: [{ id: "1", name: "John Doe", email: "John@tmax.co.kr" }],
-    getUserById: jest.fn().mockImplementation((id: string) => {
-      return id === "1" ? { id: "1", name: "John Doe" } : null;
-    }),
+import { TextEncoder } from "util";
+
+(global as any).TextEncoder = TextEncoder;
+
+const server = setupServer(
+  http.get("/greeting", () => {
+    return HttpResponse.json({ greeting: "hello there" });
+  })
+);
+
+beforeAll(() => server.listen());
+afterEach(() => server.resetHandlers());
+afterAll(() => server.close());
+
+class MockUserList implements UserList {
+  data: User[] = [];
+  getUserById = jest.fn((id: string) => {
+    return id === "1"
+      ? { id: "1", name: "John Doe", email: "John@tmax.co.kr" }
+      : null;
+  });
+
+  fetchUsers = async () => {
+    const res = await fetch("/userData");
+    const jsonData: User[] = await res.json();
+    this.data = jsonData;
   };
-  render(
-    <UserComponent userId="1" userList={fakeUserList} onClick={() => null} />
-  );
+}
 
-  expect(screen.getByRole("button")).not.toBeDisabled();
-  expect(screen.getByRole("button")).toHaveTextContent("John Doe");
+test("UserComponent renders user names from server data", async () => {
+  const mockUserList: UserList = new MockUserList();
 
-  // getUserById 메서드가 호출되었는지 확인
-  expect(fakeUserList.getUserById).toHaveBeenCalledWith("1");
+  render(<UserComponent userId="2" userList={mockUserList} />);
+
+  fireEvent.click(screen.getByRole("button"));
+
+  expect(mockUserList.data.length).toBe(2);
 });
 ```
